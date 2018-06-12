@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+
+        <title></title>
+        <style media="screen">
+            #app {
+                backgroud-color: #696969; color:#fff"
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="text/javascript">
+        if (!window.webkitSpeechRecognition) {
+            alert("Sem suporte")
+        }
+            let recognizer = new webkitSpeechRecognition()
+            recognizer.interimResults = true;
+
+            let p = document.createElement("p")
+            let app = document.querySelector("#app")
+            app.append(p)
+
+            recognizer.onresult = function(event){
+                console.log(event)
+                p.textContent = event.results[0][0].transcript
+                if (event.results[0].isFinal) {
+                    p = document.createElement("p")
+                    app.append(p)
+                }
+
+                if (event.results[0][event.resultIndex].transcript.toLowerCase().includes("j apague tudo") ||
+                    event.results[0][event.resultIndex].transcript.toLowerCase().includes("jay apague tudo")) {
+                    clear()
+                }
+            }
+
+            recognizer.onend = () => recognizer.start()
+
+            recognizer.start();
+
+            let clear = () => {
+                while (app.hasChildNodes()) {
+                    app.removeChild(app.childNodes[0])
+                }
+            }
+        </script>
+    </body>
+</html>
